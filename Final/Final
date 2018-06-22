@@ -1,0 +1,172 @@
+//sketch for robot crawling around avoiding obstacles
+#include <Servo.h>
+
+int triggerPin = 4;
+int echoPin = 7;
+int servoA1Pin = 10;
+int servoA2Pin = 8;
+
+int servoB1Pin = 5;
+int servoB2Pin = 6;
+
+int servoC1Pin = 13;
+int servoC2Pin = 12;
+
+int servoD1Pin = 2;
+int servoD2Pin = 3;
+
+Servo servoA1;
+Servo servoA2;
+
+Servo servoB1;
+Servo servoB2;
+
+Servo servoC1;
+Servo servoC2;
+
+Servo servoD1;
+Servo servoD2;
+
+
+
+void setup() {
+  Serial.begin(19200);
+  pinMode(triggerPin, OUTPUT);
+  pinMode(echoPin, INPUT);
+  digitalWrite(triggerPin, LOW);
+  servoA1.attach(servoA1Pin);
+  servoA2.attach(servoA2Pin);
+
+  servoB1.attach(servoB1Pin);
+  servoB2.attach(servoB2Pin);
+
+  servoC1.attach(servoC1Pin);
+  servoC2.attach(servoC2Pin);
+
+  servoD1.attach(servoD1Pin);
+  servoD2.attach(servoD2Pin);
+
+
+
+}
+
+float ping() {
+  unsigned long maxTime = 20000;
+  unsigned long us;
+  float inches;
+
+  digitalWrite(triggerPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(triggerPin, LOW);
+
+  us = pulseIn(echoPin, HIGH, maxTime);
+  if (us == 0) {
+    us = maxTime;
+  }
+  inches = us * 0.013504 / 2;
+  return inches;
+}
+
+
+void forward() {
+  servoA1.write(30);
+  servoB1.write(130);
+  servoC1.write(90);
+  servoD1.write(90);
+  delay(700);
+  servoD2.write(120);
+  delay(80);
+  servoD1.write(60);
+  delay(80);
+  servoD2.write(90);
+  delay(90);
+  servoC2.write(60);
+  delay(80);
+  servoC1.write(130);
+  delay(80);
+  servoC2.write(90);
+  delay(90);
+  servoA2.write(150);
+  delay(80);
+  servoA1.write(70);
+  delay(80);
+  servoA2.write(90);
+  delay(90);
+  servoB2.write(60);
+  delay(80);
+  servoB1.write(90);
+  delay(80);
+  servoB2.write(90);
+  delay(500);
+
+}
+
+void right() {
+  servoA2.write(110);
+  servoD2.write(110);
+  delay(200);
+
+  servoA1.write(90);
+  servoD1.write(110);
+  delay(200);
+
+  servoA2.write(90);
+  servoD2.write(90);
+  delay(200);
+
+  servoB2.write(70);
+  servoC2.write(70);
+  servoA1.write(70);
+  servoD1.write(90);
+  delay(200);
+
+  servoB1.write(110);
+  servoC1.write(110);
+  delay(200);
+
+  servoB2.write(90);
+  servoC2.write(90);
+  delay(200);
+
+  servoB1.write(90);
+  servoC1.write(90);
+}
+
+void startingRight() {
+  servoA1.write(70);
+  servoA2.write(90);
+
+  servoB1.write(90);
+  servoB2.write(90);
+
+  servoC1.write(90);
+  servoC2.write(90);
+
+  servoD1.write(90);
+  servoD2.write(90);
+}
+
+void startingForward() {
+  servoA1.write(30);
+  servoB1.write(130);
+  servoC1.write(90);
+  servoD1.write(90);
+}
+
+
+void loop() {
+  int e;
+  float inches = ping();
+  Serial.println(inches);
+  delay(60);
+  if (inches > 7.00) {
+     
+  forward();
+ 
+  }
+  else if (inches > 1)  {
+    for (e = 0; e < 6; e++) {
+  right();
+ }
+  }
+}
